@@ -1,15 +1,18 @@
 function startTest() {
     var name = document.getElementById('name').value;
     var classNumber = document.getElementById('classNumber').value;
-    console.log("Starting test for:", name, "from class number:", classNumber); // Log to check values
+    console.log("Name:", name, "Class Number:", classNumber); // Check the values
     if (name && classNumber) {
-        document.getElementById('startForm').style.display = 'none'; // Hide the form
-        document.getElementById('loading').style.display = 'block'; // Show loading indicator
+        console.log("Form data is valid, hiding form and loading questions.");
+        document.getElementById('startForm').style.display = 'none';
+        document.getElementById('loading').style.display = 'block';
         loadQuestions();
     } else {
+        console.log("Form data is invalid.");
         alert("Ism va sinf raqamini to'liq kiriting!");
     }
 }
+
 
 function loadQuestions() {
     console.log("Attempting to load questions from CSV file.");
