@@ -12,7 +12,7 @@ function startTest() {
 }
 
 function loadQuestions() {
-    Papa.parse("https://doniyorar.github.io/math_tests.csv", {
+    Papa.parse("https://doniyorar.github.io/adjusted_math_tests", {
         download: true,
         header: true,
         complete: function(results) {
@@ -23,15 +23,15 @@ function loadQuestions() {
                 var legend = document.createElement('legend');
                 legend.textContent = question.Question;
                 fieldset.appendChild(legend);
-                Object.keys(question).forEach(key => {
-                    if (key.startsWith('Option')) {
+                ['A', 'B', 'C', 'D'].forEach(option => {
+                    if (question[option]) {
                         var label = document.createElement('label');
                         var input = document.createElement('input');
                         input.type = 'radio';
                         input.name = 'question' + index;
-                        input.value = question[key];
+                        input.value = option; // Store the option letter as the value
                         label.appendChild(input);
-                        label.appendChild(document.createTextNode(question[key]));
+                        label.appendChild(document.createTextNode(question[option]));
                         fieldset.appendChild(label);
                     }
                 });
@@ -43,7 +43,7 @@ function loadQuestions() {
 }
 
 function submitAnswers() {
-    // Here you can add functionality to handle form submission
+    // Functionality to handle form submission can be added here
     alert("Test submitted!");
 }
 </script>
