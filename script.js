@@ -1,10 +1,9 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-<script>
 function startTest() {
     var name = document.getElementById('name').value;
     var classNumber = document.getElementById('classNumber').value;
     if (name && classNumber) {
         document.getElementById('startForm').style.display = 'none'; // Hide the form
+        document.getElementById('loading').style.display = 'block'; // Show loading indicator
         loadQuestions();
     } else {
         alert("Ism va sinf raqamini to'liq kiriting!");
@@ -12,10 +11,11 @@ function startTest() {
 }
 
 function loadQuestions() {
-    Papa.parse("https://doniyorar.github.io/adjusted_math_tests", {
+    Papa.parse("https://doniyorar.github.io/math_tests.csv", {
         download: true,
         header: true,
         complete: function(results) {
+            document.getElementById('loading').style.display = 'none'; // Hide loading indicator
             var data = results.data;
             var form = document.getElementById('testForm');
             data.forEach((question, index) => {
@@ -38,12 +38,15 @@ function loadQuestions() {
                 form.appendChild(fieldset);
             });
             document.getElementById('testContainer').style.display = 'block'; // Show the test
+        },
+        error: function(err) {
+            console.error("Error loading the CSV file:", err);
+            alert("CSV fayl yuklanishida xatolik yuz berdi. Iltimos, qaytadan urinib ko'ring.");
         }
     });
 }
 
 function submitAnswers() {
-    // Functionality to handle form submission can be added here
     alert("Test submitted!");
+    // Additional functionality to handle form submission can be added here
 }
-</script>
