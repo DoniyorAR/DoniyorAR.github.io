@@ -1,10 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="uz">
 <head>
-  <title>Welcome to My Test Platform</title>
+    <meta charset="UTF-8">
+    <title>Testni boshlash</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Hello, World!</h1>
-  <p>Welcome to my GitHub hosted page.</p>
+    <div class="container">
+        <h1>Test tizimiga xush kelibsiz!</h1>
+        <p>Iltimos, quyidagi ma'lumotlarni kiriting:</p>
+        <form id="startForm">
+            <input type="text" id="name" placeholder="Ismingiz" required>
+            <input type="text" id="classNumber" placeholder="Sinf raqamingiz" required>
+            <button type="button" onclick="startTest()">Testni boshlash</button>
+        </form>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
