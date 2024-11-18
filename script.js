@@ -1,33 +1,32 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+<script>
 function startTest() {
     var name = document.getElementById('name').value;
     var classNumber = document.getElementById('classNumber').value;
-    console.log("Name:", name, "Class Number:", classNumber); // Check the values
+    console.log("Attempting to start test for:", name, ", class:", classNumber);
     if (name && classNumber) {
-        console.log("Form data is valid, hiding form and loading questions.");
         document.getElementById('startForm').style.display = 'none';
         document.getElementById('loading').style.display = 'block';
         loadQuestions();
     } else {
-        console.log("Form data is invalid.");
         alert("Ism va sinf raqamini to'liq kiriting!");
     }
 }
 
-
 function loadQuestions() {
-    console.log("Attempting to load questions from CSV file.");
+    console.log("Loading questions from CSV...");
     Papa.parse("https://doniyorar.github.io/math_tests.csv", {
         download: true,
         header: true,
         complete: function(results) {
-            console.log("CSV parse complete:", results);
+            console.log("Questions loaded:", results);
             if (results.data && results.data.length > 0) {
                 buildTest(results.data);
             } else {
-                console.error("No data found in CSV file.");
+                console.error("No data found in CSV.");
                 alert("CSV faylida ma'lumotlar topilmadi.");
             }
-            document.getElementById('loading').style.display = 'none'; // Hide loading indicator
+            document.getElementById('loading').style.display = 'none';
         },
         error: function(err) {
             console.error("Error loading the CSV file:", err);
@@ -49,7 +48,7 @@ function buildTest(questions) {
                 var input = document.createElement('input');
                 input.type = 'radio';
                 input.name = 'question' + index;
-                input.value = option; // Store the option letter as the value
+                input.value = option;
                 label.appendChild(input);
                 label.appendChild(document.createTextNode(question[option]));
                 fieldset.appendChild(label);
@@ -57,11 +56,11 @@ function buildTest(questions) {
         });
         form.appendChild(fieldset);
     });
-    document.getElementById('testContainer').style.display = 'block'; // Show the test
+    document.getElementById('testContainer').style.display = 'block';
 }
 
 function submitAnswers() {
-    console.log("Submitting answers.");
+    console.log("Answers submitted.");
     alert("Test submitted!");
-    // Additional functionality to handle form submission can be added here
 }
+</script>
