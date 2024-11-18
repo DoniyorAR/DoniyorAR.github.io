@@ -12,7 +12,7 @@ function startTest() {
 }
 
 function loadQuestions() {
-    Papa.parse("https://doniyorar.github.io/math-tests.csv", {
+    Papa.parse("https://doniyorar.github.io/math_tests.csv", {
         download: true,
         header: true,
         complete: function(results) {
