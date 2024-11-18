@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <title>Testni boshlash</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 300px;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            box-sizing: border-box;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: #4CAF50;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #loading {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Test tizimiga xush kelibsiz!</h1>
+        <p>Iltimos, quyidagi ma'lumotlarni kiriting:</p>
+        <form id="startForm">
+            <input type="text" id="name" placeholder="Ismingiz" required>
+            <input type="text" id="classNumber" placeholder="Sinf raqamingiz" required>
+            <button type="button" onclick="startTest()">Testni boshlash</button>
+        </form>
+        <div id="testContainer" style="display:none;">
+            <form id="testForm"></form>
+            <button type="button" onclick="submitAnswers()">Submit Answers</button>
+        </div>
+        <div id="loading">Loading...</div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script>
+        function startTest() {
+            var name = document.getElementById('name').value;
+            var classNumber = document.getElementById('classNumber').value;
+            if (name && classNumber) {
+                document.getElementById('startForm').style.display = 'none'; // Hide the form
+                document.getElementById('loading').style.display = 'block'; // Show loading indicator
+                loadQuestions();
+            } else {
+                alert("Ism va sinf raqamini to'liq kiriting!");
+            }
+        }
+
+        function loadQuestions() {
+            Papa.parse("https://doniyorar.github.io/math_tests.csv", {
+                download: true,
+                header: true,
+                complete: function(results) {
+                    document.getElementById('loading').style.display = 'none'; // Hide loading indicator
+                    var data = results.data;
+                    var form = document.getElementById('testForm');
+                    data.forEach((question, index) => {
+                        var fieldset = document.createElement('fieldset');
+                        var legend = document.createElement('legend');
+                        legend.textContent = question.Question;
+                        fieldset.appendChild(legend);
+                        ['A', 'B', 'C', 'D'].forEach(option => {
+                            if (question[option]) {
+                                var label = document.createElement('label');
+                                var input = document.createElement('input');
+                                input.type = 'radio';
+                                input.name = 'question' + index;
+                                input.value = option; // Store the option letter as the value
+                                label.appendChild(input);
+                                label.appendChild(document.createTextNode(question[option]));
+                                fieldset.appendChild(label);
+                            }
+                        });
+                        form.appendChild(fieldset);
+                    });
+                    document.getElementById('testContainer').style.display = 'block'; // Show the test
+                },
+                error: function(err) {
+                    console.error("Error loading the CSV file:", err);
+                    alert("CSV fayl yuklanishida xatolik yuz berdi. Iltimos, qaytadan urinib ko'ring.");
+                }
+            });
+        }
+
+        function submitAnswers() {
+            alert("Test submitted!");
+            // Additional functionality to handle form submission can be added here
+        }
+    </script>
+</body>
+</html>
