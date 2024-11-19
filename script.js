@@ -1,112 +1,14 @@
-var questionsData; // This will hold the questions data once loaded
-
-function startTest() {
-    var name = document.getElementById('name').value.trim();
-    var classNumber = document.getElementById('classNumber').value.trim();
-
+function submitForm() {
+    const name = document.getElementById('name').value.trim();
+    const classNumber = document.getElementById('classNumber').value.trim();
+    
     if (name && classNumber) {
+        // Save user data to localStorage
         localStorage.setItem('userName', name);
         localStorage.setItem('userClassNumber', classNumber);
-        document.getElementById('startForm').style.display = 'none';
-        loadQuestions();
+        // Redirect to the question page
+        window.location.href = 'question.html';
     } else {
         alert("Ism va sinf raqamini to'liq kiriting!");
     }
-}
-
-function loadQuestions() {
-    Papa.parse("https://doniyorar.github.io/math_tests.csv", {
-        download: true,
-        header: true,
-        skipEmptyLines: true,
-        complete: function(results) {
-            if (results.data.length > 0) {
-                questionsData = results.data;
-                buildTest(questionsData);
-                // Show test container after loading questions
-                document.getElementById('testContainer').style.display = 'block';
-            } else {
-                alert("Test savollari yuklanmadi.");
-            }
-        },
-        error: function() {
-            alert("CSV fayl yuklanishida xatolik yuz berdi.");
-        }
-    });
-}
-
-function buildTest(data) {
-    var form = document.createElement('form');
-    form.id = 'testForm';
-    document.body.appendChild(form);
-
-    data.forEach((question, index) => {
-        var fieldset = document.createElement('fieldset');
-        var legend = document.createElement('legend');
-        legend.textContent = question.Question;
-        fieldset.appendChild(legend);
-
-        ['A', 'B', 'D'].forEach(key => {
-            if (question[key]) {
-                var label = document.createElement('label');
-                var input = document.createElement('input');
-                input.type = 'radio';
-                input.name = 'question' + index;
-                input.value = key;
-                label.appendChild(input);
-                label.appendChild(document.createTextNode(question[key]));
-                fieldset.appendChild(label);
-            }
-        });
-        form.appendChild(fieldset);
-    });
-
-    var submitButton = document.createElement('button');
-    submitButton.textContent = 'Javoblarni topshirish';
-    submitButton.type = 'button';
-    submitButton.onclick = submitAnswers;
-    form.appendChild(submitButton);
-}
-
-function submitAnswers() {
-    var results = collectAnswers();
-    var userName = localStorage.getItem('userName');
-    var classNumber = localStorage.getItem('userClassNumber');
-
-    // Hide the test form and display the results
-    document.getElementById('testForm').style.display = 'none';
-    displayResults(results.points);
-}
-
-function collectAnswers() {
-    var checkedAnswers = document.querySelectorAll('input[type="radio"]:checked');
-    var points = 0;
-    checkedAnswers.forEach(answer => {
-        var questionIndex = parseInt(answer.name.replace('question', ''));
-        var correctAnswer = questionsData[questionIndex].Correct;
-        if (answer.value === correctAnswer) {
-            points += 1;
-        }
-    });
-    return { points };
-}
-
-function displayResults(points) {
-    var resultDiv = document.createElement('div');
-    resultDiv.textContent = `Sizning natijangiz: ${points}`;
-    document.body.appendChild(resultDiv);
-}
-
-function downloadResults() {
-    var results = JSON.parse(localStorage.getItem('userResults')) || [];
-    var csvContent = "data:text/csv;charset=utf-8,Name,ClassNumber,Points\n";
-    results.forEach(function(result) {
-        csvContent += `${result.name},${result.classNumber},${result.points}\n`;
-    });
-
-    var encodedUri = encodeURI(csvContent);
-    var link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "test_results.csv");
-    link.click();
 }
