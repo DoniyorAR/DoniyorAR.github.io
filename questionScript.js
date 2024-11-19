@@ -57,15 +57,20 @@ function submitAnswers() {
     const checkedAnswers = document.querySelectorAll('input[type="radio"]:checked');
     let score = 0;
 
+    // Calculate the score based on the selected answers
     checkedAnswers.forEach((answer, index) => {
         if (answer.value === questionsData[index].Correct) {
             score++;
         }
     });
 
-    // Save the score to localStorage
+    // Save the score, name, and class number to localStorage
+    const name = localStorage.getItem("userName");
+    const classNumber = localStorage.getItem("userClassNumber");
     localStorage.setItem("userScore", score);
 
-    // Redirect to the results page
+    console.log(`Score saved: ${score}, Name: ${name}, Class: ${classNumber}`); // Debugging log
+
+    // Redirect to results page
     window.location.href = "result.html";
 }
