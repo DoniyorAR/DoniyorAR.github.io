@@ -1,12 +1,11 @@
-document.addEventListener("DOMContentLoaded", () => {
-    loadQuestions();
-    document.getElementById("submitAnswersButton").addEventListener("click", submitAnswers);
-});
-
 let questionsData = [];
 
+document.addEventListener("DOMContentLoaded", () => {
+    loadQuestions();
+});
+
 function loadQuestions() {
-    Papa.parse("https://doniyorar.github.io/math_tests.csv", {
+    Papa.parse("math_tests.csv", {
         download: true,
         header: true,
         skipEmptyLines: true,
@@ -19,14 +18,13 @@ function loadQuestions() {
             }
         },
         error: function () {
-            alert("CSV fayl yuklanishida xatolik yuz berdi.");
+            alert("CSV yuklanishida xatolik yuz berdi.");
         },
     });
 }
 
 function buildTest(questions) {
     const form = document.getElementById("testForm");
-    form.innerHTML = ""; // Clear any existing content
 
     questions.forEach((question, index) => {
         const fieldset = document.createElement("fieldset");
@@ -49,23 +47,41 @@ function buildTest(questions) {
 
         form.appendChild(fieldset);
     });
-
-    // Show the submit button
-    document.getElementById("submitAnswersButton").style.display = "block";
 }
 
 function submitAnswers() {
     const checkedAnswers = document.querySelectorAll('input[type="radio"]:checked');
     let score = 0;
 
-    checkedAnswers.forEach((answer) => {
-        const questionIndex = parseInt(answer.name.replace("question", ""));
-        const correctAnswer = questionsData[questionIndex].Correct;
-        if (answer.value === correctAnswer) {
+    checkedAnswers.forEach((answer, index) => {
+        if (answer.value === questionsData[index].Correct) {
             score++;
         }
     });
 
-    // Display the results
-    alert(`Sizning natijangiz: ${score}`);
+    updatePoints(score);
+}
+
+function updatePoints(score) {
+    const name = localStorage.getItem("userName");
+    const classNumber = localStorage.getItem("userClassNumber");
+
+    fetch('user.csv', { method: 'GET' })
+        .then((response) => response.text())
+        .then((data) => {
+            const rows = data.split("\n");
+            const updatedRows = rows.map((row, index) => {
+                if (index === rows.length - 2) {
+                    // Update the Points column for the last added row
+                    return `${name},${classNumber},${score}`;
+                }
+                return row;
+            });
+
+            const updatedData = updatedRows.join("\n");
+            downloadCSV(updatedData, 'user.csv');
+
+            // Redirect to result.html
+            window.location.href = "result.html";
+        });
 }
