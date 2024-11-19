@@ -59,29 +59,9 @@ function submitAnswers() {
         }
     });
 
-    updatePoints(score);
-}
+    // Save the score to localStorage
+    localStorage.setItem("userScore", score);
 
-function updatePoints(score) {
-    const name = localStorage.getItem("userName");
-    const classNumber = localStorage.getItem("userClassNumber");
-
-    fetch('user.csv', { method: 'GET' })
-        .then((response) => response.text())
-        .then((data) => {
-            const rows = data.split("\n");
-            const updatedRows = rows.map((row, index) => {
-                if (index === rows.length - 2) {
-                    // Update the Points column for the last added row
-                    return `${name},${classNumber},${score}`;
-                }
-                return row;
-            });
-
-            const updatedData = updatedRows.join("\n");
-            downloadCSV(updatedData, 'user.csv');
-
-            // Redirect to result.html
-            window.location.href = "result.html";
-        });
+    // Redirect to the results page
+    window.location.href = "result.html";
 }
