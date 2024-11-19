@@ -1,3 +1,5 @@
+var questionsData; // This will hold the questions data once loaded
+
 function startTest() {
     var name = document.getElementById('name').value.trim();
     var classNumber = document.getElementById('classNumber').value.trim();
@@ -6,7 +8,6 @@ function startTest() {
         localStorage.setItem('userName', name);
         localStorage.setItem('userClassNumber', classNumber);
         document.getElementById('startForm').style.display = 'none';
-        document.getElementById('loading').style.display = 'block';
         loadQuestions();
     } else {
         alert("Ism va sinf raqamini to'liq kiriting!");
@@ -20,9 +21,8 @@ function loadQuestions() {
         skipEmptyLines: true,
         complete: function(results) {
             if (results.data.length > 0) {
-                buildTest(results.data);
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('testContainer').style.display = 'block';
+                questionsData = results.data;
+                buildTest(questionsData);
             } else {
                 alert("Test savollari yuklanmadi.");
             }
@@ -34,8 +34,9 @@ function loadQuestions() {
 }
 
 function buildTest(data) {
-    var form = document.getElementById('testForm');
-    form.innerHTML = ''; // Clear previous entries
+    var form = document.createElement('form');
+    form.id = 'testForm';
+    document.body.appendChild(form);
 
     data.forEach((question, index) => {
         var fieldset = document.createElement('fieldset');
@@ -57,11 +58,49 @@ function buildTest(data) {
         });
         form.appendChild(fieldset);
     });
+
+    var submitButton = document.createElement('button');
+    submitButton.textContent = 'Javoblarni topshirish';
+    submitButton.type = 'button';
+    submitButton.onclick = submitAnswers;
+    form.appendChild(submitButton);
 }
 
 function submitAnswers() {
     var userName = localStorage.getItem('userName');
     var classNumber = localStorage.getItem('userClassNumber');
-    console.log("Answers submitted for:", userName, "Class:", classNumber);
+    var results = collectAnswers(); 
+
+    var allResults = JSON.parse(localStorage.getItem('userResults')) || [];
+    allResults.push({ name: userName, classNumber: classNumber, points: results.points });
+    localStorage.setItem('userResults', JSON.stringify(allResults));
+
     alert("Javoblarni topshirildi!");
+}
+
+function collectAnswers() {
+    var checkedAnswers = document.querySelectorAll('input[type="radio"]:checked');
+    var points = 0;
+    checkedAnswers.forEach(answer => {
+        var questionIndex = parseInt(answer.name.replace('question', ''));
+        var correctAnswer = questionsData[questionIndex].Correct;
+        if (answer.value === correctAnswer) {
+            points += 1;
+        }
+    });
+    return { points };
+}
+
+function downloadResults() {
+    var results = JSON.parse(localStorage.getItem('userResults')) || [];
+    var csvContent = "data:text/csv;charset=utf-8,Name,ClassNumber,Points\n";
+    results.forEach(function(result) {
+        csvContent += `${result.name},${result.classNumber},${result.points}\n`;
+    });
+
+    var encodedUri = encodeURI(csvContent);
+    var link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "test_results.csv");
+    link.click();
 }
