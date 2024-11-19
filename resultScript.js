@@ -1,10 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
-    fetch('user.csv', { method: 'GET' })
-        .then((response) => response.text())
-        .then((data) => {
-            const rows = data.split("\n");
-            const lastRow = rows[rows.length - 2]; // Get the last row
-            const [name, classNumber, points] = lastRow.split(",");
-            document.getElementById("resultsDisplay").textContent = `Ism: ${name}, Sinf: ${classNumber}, Ball: ${points}`;
-        });
+    const name = localStorage.getItem("userName");
+    const classNumber = localStorage.getItem("userClassNumber");
+    const score = localStorage.getItem("userScore");
+
+    if (name && classNumber && score !== null) {
+        document.getElementById("resultsDisplay").textContent = `Ism: ${name}, Sinf: ${classNumber}, Ball: ${score}`;
+    } else {
+        document.getElementById("resultsDisplay").textContent = "Xatolik yuz berdi! Natijalar topilmadi.";
+    }
 });
