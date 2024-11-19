@@ -7,17 +7,31 @@
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <img src="header.jfif" alt="Header Image">
-        </div>
-        <h1>Test tizimiga xush kelibsiz!</h1>
-        <p>Iltimos, quyidagi ma'lumotlarni kiriting:</p>
-        <form id="startForm">
+        <!-- User input section -->
+        <div id="userInputSection">
+            <h1>Test tizimiga xush kelibsiz!</h1>
+            <p>Iltimos, quyidagi ma'lumotlarni kiriting:</p>
             <input type="text" id="name" placeholder="Ismingiz" required>
             <input type="text" id="classNumber" placeholder="Sinf raqamingiz" required>
-            <button type="submit" onclick="submitForm()">Testni boshlash</button>
-        </form>
+            <button onclick="startTest()">Testni boshlash</button>
+        </div>
+        
+        <!-- Questions section -->
+        <div id="questionsSection" style="display:none;">
+            <h1>Test Savollari</h1>
+            <form id="testForm">
+                <!-- Questions will be injected here -->
+            </form>
+            <button onclick="submitAnswers()">Javoblarni topshirish</button>
+        </div>
+
+        <!-- Results section -->
+        <div id="resultsSection" style="display:none;">
+            <h1>Test Natijalari</h1>
+            <div id="resultsDisplay"></div>
+        </div>
     </div>
     <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 </body>
 </html>
