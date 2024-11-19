@@ -15,11 +15,13 @@ function startTest() {
         localStorage.setItem("userName", name);
         localStorage.setItem("userClassNumber", classNumber);
 
-        // Hide the user input section and show the questions section
+        // Hide the user input section
         document.getElementById("userInputSection").style.display = "none";
+
+        // Show the questions section
         document.getElementById("questionsSection").style.display = "block";
 
-        // Load questions from CSV
+        // Load questions
         loadQuestions();
     } else {
         alert("Iltimos, ismingiz va sinf raqamingizni to'ldiring!");
@@ -68,4 +70,31 @@ function buildTest(questions) {
             }
         });
 
-        form.appendC
+        form.appendChild(fieldset);
+    });
+
+    // Show the submit button
+    document.getElementById("submitAnswersButton").style.display = "block";
+}
+
+function submitAnswers() {
+    const checkedAnswers = document.querySelectorAll('input[type="radio"]:checked');
+    let score = 0;
+
+    checkedAnswers.forEach((answer) => {
+        const questionIndex = parseInt(answer.name.replace("question", ""));
+        const correctAnswer = questionsData[questionIndex].Correct;
+        if (answer.value === correctAnswer) {
+            score++;
+        }
+    });
+
+    // Hide the questions section and show the results section
+    document.getElementById("questionsSection").style.display = "none";
+    document.getElementById("resultsSection").style.display = "block";
+
+    // Display the results
+    const name = localStorage.getItem("userName");
+    const classNumber = localStorage.getItem("userClassNumber");
+    document.getElementById("resultsDisplay").textContent = `${name} (${classNumber}), Sizning natijangiz: ${score}`;
+}
