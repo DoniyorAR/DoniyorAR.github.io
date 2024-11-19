@@ -2,17 +2,14 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test Savollari</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <h1>Test Savollari</h1>
-        <form id="testForm">
-            <!-- Questions will be dynamically added here -->
-        </form>
-        <button id="submitAnswersButton" style="display: none;">Javoblarni topshirish</button>
+        <form id="testForm"></form>
+        <button onclick="submitAnswers()">Javoblarni topshirish</button>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <script src="questionScript.js"></script>
