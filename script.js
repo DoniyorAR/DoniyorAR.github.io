@@ -23,7 +23,7 @@ function loadQuestions() {
             if (results.data.length > 0) {
                 questionsData = results.data;
                 buildTest(questionsData);
-                document.getElementById('loading').style.display = 'none';
+                // Show test container after loading questions
                 document.getElementById('testContainer').style.display = 'block';
             } else {
                 alert("Test savollari yuklanmadi.");
@@ -46,7 +46,7 @@ function buildTest(data) {
         legend.textContent = question.Question;
         fieldset.appendChild(legend);
 
-        ['A', 'B', 'D'].forEach(key => {  // Reflect the absence of option C
+        ['A', 'B', 'D'].forEach(key => {
             if (question[key]) {
                 var label = document.createElement('label');
                 var input = document.createElement('input');
@@ -69,15 +69,13 @@ function buildTest(data) {
 }
 
 function submitAnswers() {
+    var results = collectAnswers();
     var userName = localStorage.getItem('userName');
     var classNumber = localStorage.getItem('userClassNumber');
-    var results = collectAnswers(); 
 
-    var allResults = JSON.parse(localStorage.getItem('userResults')) || [];
-    allResults.push({ name: userName, classNumber: classNumber, points: results.points });
-    localStorage.setItem('userResults', JSON.stringify(allResults));
-
-    alert("Javoblarni topshirildi!");
+    // Hide the test form and display the results
+    document.getElementById('testForm').style.display = 'none';
+    displayResults(results.points);
 }
 
 function collectAnswers() {
@@ -91,6 +89,12 @@ function collectAnswers() {
         }
     });
     return { points };
+}
+
+function displayResults(points) {
+    var resultDiv = document.createElement('div');
+    resultDiv.textContent = `Sizning natijangiz: ${points}`;
+    document.body.appendChild(resultDiv);
 }
 
 function downloadResults() {
