@@ -25,6 +25,7 @@ function loadQuestions() {
 
 function buildTest(questions) {
     const form = document.getElementById("testForm");
+    form.innerHTML = ""; // Clear any existing content
 
     questions.forEach((question, index) => {
         const fieldset = document.createElement("fieldset");
@@ -47,6 +48,9 @@ function buildTest(questions) {
 
         form.appendChild(fieldset);
     });
+
+    // Ensure the submit button is visible
+    document.getElementById("submitAnswersButton").style.display = "block";
 }
 
 function submitAnswers() {
