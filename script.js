@@ -23,6 +23,8 @@ function loadQuestions() {
             if (results.data.length > 0) {
                 questionsData = results.data;
                 buildTest(questionsData);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('testContainer').style.display = 'block';
             } else {
                 alert("Test savollari yuklanmadi.");
             }
@@ -44,7 +46,7 @@ function buildTest(data) {
         legend.textContent = question.Question;
         fieldset.appendChild(legend);
 
-        ['A', 'B', 'C', 'D'].forEach(key => {
+        ['A', 'B', 'D'].forEach(key => {  // Reflect the absence of option C
             if (question[key]) {
                 var label = document.createElement('label');
                 var input = document.createElement('input');
