@@ -1,15 +1,13 @@
+var questionsData; // This will hold the questions data once loaded
+
 function startTest() {
-    console.log("startTest function called"); // Debug log
-    const name = document.getElementById('name').value.trim();
-    const classNumber = document.getElementById('classNumber').value.trim();
-    console.log("Name:", name, "Class Number:", classNumber); // Debug inputs
-    
+    var name = document.getElementById('name').value.trim();
+    var classNumber = document.getElementById('classNumber').value.trim();
+
     if (name && classNumber) {
         localStorage.setItem('userName', name);
         localStorage.setItem('userClassNumber', classNumber);
-        console.log("Redirecting to questions...");
-        document.getElementById('userInputSection').style.display = 'none';
-        document.getElementById('questionsSection').style.display = 'block';
+        document.getElementById('startForm').style.display = 'none';
         loadQuestions();
     } else {
         alert("Ism va sinf raqamini to'liq kiriting!");
@@ -17,15 +15,16 @@ function startTest() {
 }
 
 function loadQuestions() {
-    console.log("Loading questions..."); // Debug log
     Papa.parse("https://doniyorar.github.io/math_tests.csv", {
         download: true,
         header: true,
         skipEmptyLines: true,
         complete: function(results) {
             if (results.data.length > 0) {
-                console.log("Questions loaded successfully.");
-                buildTest(results.data);
+                questionsData = results.data;
+                buildTest(questionsData);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('testContainer').style.display = 'block';
             } else {
                 alert("Test savollari yuklanmadi.");
             }
@@ -36,20 +35,21 @@ function loadQuestions() {
     });
 }
 
-function buildTest(questions) {
-    console.log("Building test..."); // Debug log
-    const form = document.getElementById('testForm');
-    form.innerHTML = ''; // Clear previous content if any
-    questions.forEach((question, index) => {
-        const fieldset = document.createElement('fieldset');
-        const legend = document.createElement('legend');
+function buildTest(data) {
+    var form = document.createElement('form');
+    form.id = 'testForm';
+    document.body.appendChild(form);
+
+    data.forEach((question, index) => {
+        var fieldset = document.createElement('fieldset');
+        var legend = document.createElement('legend');
         legend.textContent = question.Question;
         fieldset.appendChild(legend);
 
-        ['A', 'B', 'D'].forEach(key => {
+        ['A', 'B', 'D'].forEach(key => {  // Reflect the absence of option C
             if (question[key]) {
-                const label = document.createElement('label');
-                const input = document.createElement('input');
+                var label = document.createElement('label');
+                var input = document.createElement('input');
                 input.type = 'radio';
                 input.name = 'question' + index;
                 input.value = key;
@@ -60,22 +60,49 @@ function buildTest(questions) {
         });
         form.appendChild(fieldset);
     });
+
+    var submitButton = document.createElement('button');
+    submitButton.textContent = 'Javoblarni topshirish';
+    submitButton.type = 'button';
+    submitButton.onclick = submitAnswers;
+    form.appendChild(submitButton);
 }
 
 function submitAnswers() {
-    console.log("Submitting answers..."); // Debug log
-    const checkedAnswers = document.querySelectorAll('input[type="radio"]:checked');
-    let score = 0;
+    var userName = localStorage.getItem('userName');
+    var classNumber = localStorage.getItem('userClassNumber');
+    var results = collectAnswers(); 
+
+    var allResults = JSON.parse(localStorage.getItem('userResults')) || [];
+    allResults.push({ name: userName, classNumber: classNumber, points: results.points });
+    localStorage.setItem('userResults', JSON.stringify(allResults));
+
+    alert("Javoblarni topshirildi!");
+}
+
+function collectAnswers() {
+    var checkedAnswers = document.querySelectorAll('input[type="radio"]:checked');
+    var points = 0;
     checkedAnswers.forEach(answer => {
-        const questionIndex = parseInt(answer.name.replace('question', ''));
-        const correctAnswer = questionsData[questionIndex].Correct;
+        var questionIndex = parseInt(answer.name.replace('question', ''));
+        var correctAnswer = questionsData[questionIndex].Correct;
         if (answer.value === correctAnswer) {
-            score++;
+            points += 1;
         }
     });
+    return { points };
+}
 
-    console.log("Final score:", score); // Debug log
-    document.getElementById('questionsSection').style.display = 'none';
-    document.getElementById('resultsSection').style.display = 'block';
-    document.getElementById('resultsDisplay').textContent = `Sizning natijangiz: ${score}`;
+function downloadResults() {
+    var results = JSON.parse(localStorage.getItem('userResults')) || [];
+    var csvContent = "data:text/csv;charset=utf-8,Name,ClassNumber,Points\n";
+    results.forEach(function(result) {
+        csvContent += `${result.name},${result.classNumber},${result.points}\n`;
+    });
+
+    var encodedUri = encodeURI(csvContent);
+    var link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "test_results.csv");
+    link.click();
 }
