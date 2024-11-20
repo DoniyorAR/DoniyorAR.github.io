@@ -32,11 +32,15 @@ fieldset {
     padding: 10px;
     background-color: #f0f0f0;
     border-radius: 8px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
 }
 
 legend {
     font-weight: bold;
     color: #555;
+    grid-column: 1 / -1; /* Span full width */
 }
 
 label {
@@ -47,6 +51,8 @@ label {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s, border-color 0.3s;
+    display: block;
+    text-align: right;
 }
 
 input[type="radio"] {
