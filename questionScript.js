@@ -30,18 +30,20 @@ function buildTest(questions) {
     questions.forEach((question, index) => {
         const fieldset = document.createElement("fieldset");
         const legend = document.createElement("legend");
-        legend.textContent = question.Question;
+        legend.textContent = `Question ${index + 1}: ${question.Question}`;
         fieldset.appendChild(legend);
 
-        ["A", "B", "D"].forEach((key) => {
+        // Ensure options are A, B, C, D even if the data skips 'C'
+        const options = ['A', 'B', 'C', 'D'];
+        options.forEach((key) => {
             if (question[key]) {
                 const label = document.createElement("label");
                 const input = document.createElement("input");
                 input.type = "radio";
-                input.name = "question" + index;
+                input.name = `question${index}`;
                 input.value = key;
                 label.appendChild(input);
-                label.appendChild(document.createTextNode(question[key]));
+                label.appendChild(document.createTextNode(` ${key}. ${question[key]}`));
                 fieldset.appendChild(label);
             }
         });
