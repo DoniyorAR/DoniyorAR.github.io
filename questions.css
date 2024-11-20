@@ -2,8 +2,8 @@
 body, html {
     margin: 0;
     padding: 0;
-    font-family: 'Comic Sans MS', 'Arial', sans-serif;
-    background: linear-gradient(135deg, #fce38a, #f38181);
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #f3e5f5, #e1bee7);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -12,7 +12,7 @@ body, html {
 
 .test-container {
     width: 90%;
-    max-width: 700px;
+    max-width: 800px;
     background: #ffffff;
     padding: 20px;
     border-radius: 15px;
@@ -21,10 +21,10 @@ body, html {
 }
 
 .test-header {
-    color: #ff6f61;
+    color: #673ab7;
     font-size: 2rem;
     margin-bottom: 20px;
-    text-shadow: 1px 1px 2px #ff9a8b;
+    text-shadow: 1px 1px 2px #ab47bc;
 }
 
 /* Form styles */
@@ -36,7 +36,7 @@ form {
 
 fieldset {
     border: none;
-    background: #f9f9f9;
+    background: #ede7f6;
     padding: 15px;
     border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -46,25 +46,35 @@ fieldset {
 /* Question text */
 legend {
     font-size: 1.5rem;
-    color: #333;
+    color: #512da8;
     margin-bottom: 10px;
 }
 
 /* Option styles */
 label {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 15px;
-    margin: 5px 0;
+    display: block;
     background: #ffffff;
-    border: 2px solid #ddd;
+    margin: 10px 0;
+    padding: 15px;
+    border: 2px solid #d1c4e9;
     border-radius: 10px;
     cursor: pointer;
     font-size: 1.2rem;
     font-weight: bold;
     transition: background-color 0.3s, border-color 0.3s;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+label span {
+    background: #673ab7;
+    color: #ffffff;
+    border-radius: 50%;
+    padding: 5px 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
 }
 
 input[type="radio"] {
@@ -72,23 +82,15 @@ input[type="radio"] {
 }
 
 label:hover, input[type="radio"]:checked + label {
-    background-color: #ffddcc;
-    border-color: #ff6f61;
-}
-
-/* Option letter */
-label span {
-    font-size: 1.5rem;
-    color: #ff6f61;
-    font-weight: bold;
-    margin-right: 10px;
+    background-color: #d1c4e9;
+    border-color: #7e57c2;
 }
 
 /* Button styles */
 button {
     padding: 15px 30px;
     font-size: 1.2rem;
-    background: #ff6f61;
+    background: #673ab7;
     color: white;
     border: none;
     border-radius: 10px;
@@ -98,7 +100,7 @@ button {
 }
 
 button:hover {
-    background: #e85d50;
+    background: #5e35b1;
 }
 
 /* Responsive styles */
