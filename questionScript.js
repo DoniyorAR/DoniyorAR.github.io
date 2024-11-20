@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function loadQuestions() {
-    Papa.parse("math_tests.csv", {
+    Papa.parse("adjusted_quiz_questions.csv", {
         download: true,
         header: true,
         skipEmptyLines: true,
