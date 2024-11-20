@@ -10,11 +10,47 @@
     <div class="test-container">
         <h1 class="test-header">Test Savollari</h1>
         <form id="testForm">
-            <!-- Questions will be dynamically added here -->
+            <fieldset>
+                <legend>1. What is the capital of Uzbekistan?</legend>
+                <input type="radio" id="q1a" name="q1" value="Samarkand">
+                <label for="q1a"><span>A)</span> Samarkand</label><br>
+                <input type="radio" id="q1b" name="q1" value="Bukhara">
+                <label for="q1b"><span>B)</span> Bukhara</label><br>
+                <input type="radio" id="q1c" name="q1" value="Tashkent">
+                <label for="q1c"><span>C)</span> Tashkent</label>
+            </fieldset>
+
+            <fieldset>
+                <legend>2. What is 10 + 15?</legend>
+                <input type="radio" id="q2a" name="q2" value="25">
+                <label for="q2a"><span>A)</span> 25</label><br>
+                <input type="radio" id="q2b" name="q2" value="20">
+                <label for="q2b"><span>B)</span> 20</label><br>
+                <input type="radio" id="q2c" name="q2" value="30">
+                <label for="q2c"><span>C)</span> 30</label>
+            </fieldset>
+
+            <fieldset>
+                <legend>3. Who wrote 'Hamlet'?</legend>
+                <input type="radio" id="q3a" name="q3" value="Charles Dickens">
+                <label for="q3a"><span>A)</span> Charles Dickens</label><br>
+                <input type="radio" id="q3b" name="q3" value="William Shakespeare">
+                <label for="q3b"><span>B)</span> William Shakespeare</label><br>
+                <input type="radio" id="q3c" name="q3" value="Mark Twain">
+                <label for="q3c"><span>C)</span> Mark Twain</label>
+            </fieldset>
+
+            <fieldset>
+                <legend>4. What is the boiling point of water?</legend>
+                <input type="radio" id="q4a" name="q4" value="100°C">
+                <label for="q4a"><span>A)</span> 100°C</label><br>
+                <input type="radio" id="q4b" name="q4" value="90°C">
+                <label for="q4b"><span>B)</span> 90°C</label><br>
+                <input type="radio" id="q4c" name="q4" value="110°C">
+                <label for="q4c"><span>C)</span> 110°C</label>
+            </fieldset>
         </form>
         <button id="submitAnswersButton" onclick="submitAnswers()">Javoblarni topshirish</button>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-    <script src="questionScript.js"></script>
 </body>
 </html>
