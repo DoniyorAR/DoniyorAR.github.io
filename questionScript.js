@@ -30,14 +30,8 @@ function buildTest(questions) {
     questions.forEach((question, index) => {
         const fieldset = document.createElement("fieldset");
         const legend = document.createElement("legend");
-        legend.textContent = `Savol ${index + 1}: ${question.Question}`; // Using "Savol" instead of "Question"
+        legend.innerHTML = `<strong>Savol ${index + 1}:</strong> ${question.Question}`; // Using "Savol" instead of "Question" and bolding it
         fieldset.appendChild(legend);
-
-        // Create a container for the question options to align them to the right
-        const optionsContainer = document.createElement("div");
-        optionsContainer.style.display = "flex";
-        optionsContainer.style.flexDirection = "column";
-        optionsContainer.style.alignItems = "flex-end";
 
         ['A', 'B', 'C', 'D'].forEach((key) => { // Iterate over each option
             if (question[key]) {
@@ -48,11 +42,10 @@ function buildTest(questions) {
                 input.value = key;
                 label.appendChild(input);
                 label.innerHTML += ` ${key}. ${question[key]}`; // Include option label
-                optionsContainer.appendChild(label);
+                fieldset.appendChild(label);
             }
         });
 
-        fieldset.appendChild(optionsContainer);
         form.appendChild(fieldset);
     });
 
@@ -80,4 +73,3 @@ function submitAnswers() {
     // Redirect to results page or handle the scoring display differently
     window.location.href = "result.html"; // Redirect to a results page if needed
 }
-
