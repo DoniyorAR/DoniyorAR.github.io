@@ -41,7 +41,7 @@ legend {
     font-weight: bold; /* Already bold, increase if needed */
     color: #555;
     grid-column: 1 / -1; /* Span full width */
-    font-size: 110%; /* Increase size for emphasis */
+    font-size: 120%; /* Increase size for emphasis */
 }
 
 label {
