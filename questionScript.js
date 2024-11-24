@@ -17,14 +17,12 @@ function loadQuestions() {
         const data = new Uint8Array(request.response);
         const workbook = XLSX.read(data, {type: 'array'});
 
-        // Assuming your Excel file has one sheet and the required data is on the first sheet
         const firstSheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[firstSheetName];
         const json = XLSX.utils.sheet_to_json(worksheet, {header:1});
 
-        // Convert array of arrays (json) to array of objects assuming the first row as header
         if (json.length > 1) {
-            const keys = json.shift(); // Remove the first row and use it as keys for objects
+            const keys = json.shift(); // First row as headers
             questionsData = json.map((row) => {
                 let obj = {};
                 row.forEach((cell, index) => {
@@ -55,7 +53,7 @@ function buildTest(questions) {
         legend.innerHTML = `<strong>Savol ${index + 1}:</strong> ${question.Question}`;
         fieldset.appendChild(legend);
 
-        ['A', 'B', 'C', 'D'].forEach((key) => {
+        ['A', 'B', 'D'].forEach((key) => { // Only three options 'A', 'B', 'D'
             if (question[key]) {
                 const label = document.createElement("label");
                 const input = document.createElement("input");
@@ -81,13 +79,13 @@ function submitAnswers() {
     let score = 0;
 
     checkedAnswers.forEach((answer, index) => {
-        if (answer.value === questionsData[index].Correct) {
+        if (answer.value === questionsData[index]['D.1']) { // Check against the correct answer column 'D.1'
             score++;
         }
     });
 
     localStorage.setItem("userScore", score);
     alert(`Sizning ballingiz: ${score}`);
-    window.location.href = "result.html";
+    window.location.href = "result.html"; // Redirect to a results page
 }
 </script>
